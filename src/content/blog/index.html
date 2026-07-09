@@ -1,0 +1,26 @@
+---
+layout: layouts/page.njk
+title: Blog
+description: Notes and updates from the Wild Globalization project.
+permalink: /blog/
+eleventyExcludeFromCollections: true
+feed: false
+eyebrow: Blog
+---
+
+<p>Notes and updates from the Wild Globalization project.</p>
+
+<ul class="post-list">
+  {% for post in collections.blog %}
+  <li class="h-entry">
+    <a class="p-name u-url" href="{{ post.url }}">{{ post.data.title }}</a>
+    <time class="dt-published" datetime="{{ post.date | dateToRfc3339 }}">{{ post.date | readableDate }}</time>
+    <span class="p-author h-card">
+      <a class="p-name u-url" href="{{ settings.person.url }}" rel="author">Gary Bedford</a>
+    </span>
+    {% if post.data.description %}
+    <p class="p-summary">{{ post.data.description }}</p>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>

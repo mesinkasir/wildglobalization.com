@@ -1,0 +1,22 @@
+---
+permalink: /feed/feed.rss
+---
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>{{ settings.title }}</title>
+		<link>{{ settings.url }}</link>
+		<description>{{ settings.description }}</description>
+		<language>en</language>
+		<generator>Eleventy</generator>
+		{% for post in collections.blog | limit(20) %}
+		<item>
+			<title>{{ post.data.title }}</title>
+			<link>{{ post.url | fullUrl }}</link>
+			<guid>{{ post.url | fullUrl }}</guid>
+			<pubDate>{{ post.date | dateToRfc822 }}</pubDate>
+			<description>{{ post.templateContent | excerpt }}</description>
+		</item>
+		{% endfor %}
+	</channel>
+</rss>

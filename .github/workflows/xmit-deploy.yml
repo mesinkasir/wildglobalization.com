@@ -1,0 +1,95 @@
+name: Build and Deploy Eleventy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      site:
+        description: "XMIT site/domain override"
+        required: false
+        type: string
+
+concurrency:
+  group: eleventy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Eleventy site
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          if [ ! -d _site ]; then
+            echo "_site directory missing after build" >&2
+            exit 1
+          fi
+          ls -1 _site | head -n 20
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: eleventy-site
+          path: _site
+
+  deploy:
+    name: Deploy to XMIT
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    env:
+      XMIT_SITE: ${{ inputs.site || vars.XMIT_SITE || 'wildglobalization.com' }}
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: eleventy-site
+          path: _site
+
+      - name: Deploy to XMIT (CLI)
+        env:
+          XMIT_KEY: ${{ secrets.XMIT_KEY }}
+        run: |
+          if [ -z "$XMIT_KEY" ]; then
+            echo "XMIT_KEY secret is not set" >&2
+            exit 1
+          fi
+          if [ -z "$XMIT_SITE" ]; then
+            echo "XMIT site/domain not provided. Set repo variable XMIT_SITE or pass the workflow_dispatch site input." >&2
+            exit 1
+          fi
+          echo "Deploying _site to $XMIT_SITE via XMIT CLI"
+          npx -y @xmit.co/xmit "$XMIT_SITE" _site
+
+      - name: Post-deploy summary
+        run: |
+          echo "Deployment attempt finished for $XMIT_SITE"
+          echo "Visit: https://$XMIT_SITE"

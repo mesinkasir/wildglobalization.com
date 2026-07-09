@@ -1,0 +1,56 @@
+{% extends "layouts/base.njk" %}
+
+{% set timelineItems = collections.timelinePages | default([]) %}
+{% set categories = [] %}
+{% for item in timelineItems %}
+	{% set category = item.data.timelineCategory | default('uncategorized') %}
+	{% if category and category not in categories %}
+		{% set categories = (categories.push(category), categories) %}
+	{% endif %}
+{% endfor %}
+
+{% block content %}
+<section class="timeline-page section">
+	<div class="section-inner timeline-hero">
+		<p class="section-label">Timeline</p>
+		<h1>{{ title }}</h1>
+		<p>{{ description }}</p>
+	</div>
+
+	<div class="section-inner timeline-shell" data-timeline>
+		<div class="timeline-controls" aria-label="Timeline filters">
+			<button type="button" class="is-active" data-timeline-filter="all">All</button>
+			{% for category in categories %}
+				<button type="button" data-timeline-filter="{{ category }}">{{ category }}</button>
+			{% endfor %}
+		</div>
+
+		<ol class="timeline-list">
+			{% for item in timelineItems %}
+				{% set category = item.data.timelineCategory | default('uncategorized') %}
+				<li class="timeline-item" data-timeline-item data-category="{{ category }}">
+					<div class="timeline-marker" aria-hidden="true"></div>
+					<article>
+						<p class="timeline-meta">
+							{% if item.data.timelineDate %}<span>{{ item.data.timelineDate }}</span>{% endif %}
+							{% if item.data.timelineEra %}<span>{{ item.data.timelineEra }}</span>{% endif %}
+						</p>
+						<h2>{{ item.data.title }}</h2>
+						<p>{{ item.data.description | default(item.templateContent | excerpt) }}</p>
+						<a href="{{ item.url }}">Read related page <span aria-hidden="true">-&gt;</span></a>
+					</article>
+				</li>
+			{% else %}
+				<li class="timeline-item" data-timeline-item data-category="uncategorized">
+					<div class="timeline-marker" aria-hidden="true"></div>
+					<article>
+						<h2>No timeline pages yet</h2>
+						<p>Add pages with <code>showInTimeline: true</code> to populate this timeline.</p>
+					</article>
+				</li>
+			{% endfor %}
+		</ol>
+		<p class="timeline-empty" data-timeline-empty hidden>No timeline entries match this filter.</p>
+	</div>
+</section>
+{% endblock %}

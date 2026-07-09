@@ -1,0 +1,49 @@
+---
+permalink: /feed/firehose.xml
+eleventyExcludeFromCollections: true
+layout: false
+---
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/feed/pretty-atom-feed.xsl"?>
+{% set items = collections.blog %}
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>{{ settings.title }} Firehose</title>
+	<subtitle>{{ settings.description }}</subtitle>
+	<link href="{{ '/feed/firehose.xml' | fullUrl }}" rel="self" />
+	<link href="{{ '/' | fullUrl }}" />
+	<link href="https://explore.wildglobalization.com/feed" rel="related" type="application/atom+xml" title="Wild Globalization Explore Feed" />
+	<updated>{{ ((items[0] and items[0].date) or buildDate) | dateToRfc3339 }}</updated>
+	<id>{{ '/feed/firehose.xml' | fullUrl }}</id>
+	<author>
+		<name>{{ settings.author.name }}</name>
+		<uri>{{ settings.author.url }}</uri>
+	</author>
+
+	{%- for post in items %}
+		{%- if loop.index0 < 100 and post.url and post.data and post.data.title %}
+		<entry>
+			<title>{{ post.data.title | xmlEscape | safe }}</title>
+			<link href="{{ post.url | fullUrl | xmlEscape | safe }}" />
+			<updated>{{ post.date | dateToRfc3339 }}</updated>
+			<id>{{ post.url | fullUrl | xmlEscape | safe }}</id>
+			<content type="html"><![CDATA[{{ (post.templateContent or post.content or post.data.description or '') | trim | cdataEscape | safe }}]]></content>
+		</entry>
+		{%- endif %}
+	{%- endfor %}
+
+	{%- for entry in exploreFeedEntries %}
+		<entry>
+			<title>{{ entry.title | xmlEscape | safe }}</title>
+			<link href="{{ entry.url | xmlEscape | safe }}" />
+			<link href="https://explore.wildglobalization.com/feed" rel="via" type="application/rss+xml" title="Wild Globalization Explore Feed" />
+			<updated>{{ entry.date | dateToRfc3339 }}</updated>
+			<id>{{ entry.id | xmlEscape | safe }}</id>
+			<author>
+				<name>Wild Globalization</name>
+				<uri>https://explore.wildglobalization.com/</uri>
+			</author>
+			{% if entry.summary %}<summary>{{ entry.summary | xmlEscape | safe }}</summary>{% endif %}
+			<content type="html"><![CDATA[{{ entry.content | trim | cdataEscape | safe }}]]></content>
+		</entry>
+	{%- endfor %}
+</feed>

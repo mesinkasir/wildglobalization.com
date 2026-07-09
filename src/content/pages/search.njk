@@ -1,0 +1,54 @@
+---
+layout: layouts/page.njk
+title: "Search"
+description: "Search the Wild Globalization site."
+permalink: /search/
+eleventyNavigation:
+  key: "Search"
+  parent: "Pages"
+  order: 95
+showInPagesNav: true
+showInTimeline: false
+---
+
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-component-ui.js" defer></script>
+
+<div class="search-page" data-search-page>
+  <p>Search the Wild Globalization archive. Press <kbd>Command</kbd> + <kbd>K</kbd> on Mac or <kbd>Ctrl</kbd> + <kbd>K</kbd> on Windows/Linux to focus search.</p>
+  <pagefind-searchbox show-sub-results shortcut="mod+k" autofocus></pagefind-searchbox>
+  <p class="search-page__credit">Search powered by <a href="https://pagefind.app/" rel="noopener noreferrer">Pagefind</a>.</p>
+</div>
+
+<script>
+(() => {
+  const findSearchInput = () => {
+    const searchbox = document.querySelector('pagefind-searchbox');
+    if (!searchbox) return null;
+    if (typeof searchbox.focus === 'function') return searchbox;
+    return searchbox.querySelector('input') || searchbox.shadowRoot?.querySelector('input') || null;
+  };
+
+  const focusSearch = () => {
+    const input = findSearchInput();
+    if (!input) return false;
+    input.focus();
+    if (typeof input.select === 'function') input.select();
+    return true;
+  };
+
+  document.addEventListener('keydown', (event) => {
+    const isSearchShortcut = (event.metaKey || event.ctrlKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === 'k';
+    if (!isSearchShortcut) return;
+
+    const active = document.activeElement;
+    const isTextInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+    if (isTextInput) return;
+
+    event.preventDefault();
+    if (!focusSearch()) {
+      window.setTimeout(focusSearch, 100);
+    }
+  });
+})();
+</script>

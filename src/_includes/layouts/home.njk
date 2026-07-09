@@ -1,0 +1,99 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<section class="hero">
+	<img class="hero__image" src="{{ hero.image }}" alt="{{ hero.imageAlt }}" loading="eager" decoding="async" fetchpriority="high" width="1024" height="1024" eleventy:ignore>
+	<div class="hero__shade"></div>
+	<div class="section-inner hero__content">
+		<p class="eyebrow"><span></span> {{ hero.eyebrow }}</p>
+		<h1>{{ hero.title | safe }}</h1>
+		<p class="hero__dek">{{ hero.dek }}</p>
+		<div class="actions">
+			<a class="button" href="{{ hero.ctaPrimary.url }}" rel="noopener noreferrer">{{ hero.ctaPrimary.label }}</a>
+			<a class="button button--secondary" href="{{ hero.ctaSecondary.url }}" rel="noopener noreferrer">{{ hero.ctaSecondary.label }}</a>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="book">
+	<div class="section-inner split">
+		<div>
+			<p class="section-label">{{ book.label }}</p>
+			<h2>{{ book.title | safe }}</h2>
+			<div class="markdown">{{ book.body | md | safe }}</div>
+			<a class="button" href="{{ book.cta.url }}" rel="noopener noreferrer">{{ book.cta.label }}</a>
+		</div>
+		<div class="book-cover">
+			<img src="{{ book.coverImage }}" alt="{{ book.coverAlt }}">
+		</div>
+	</div>
+	<div class="section-inner force-grid">
+		{% for force in forces %}
+			<a class="force-card" href="{{ force.url }}" aria-label="Explore Wild {{ force.heading }}">
+				<div class="force-card__icon">{{ force.icon }}</div>
+				<p class="force-card__label">{{ force.label }}</p>
+				<h3>{{ force.heading }}</h3>
+				<p>{{ force.body }}</p>
+				<span class="force-card__link">Explore this force <span aria-hidden="true">-&gt;</span></span>
+			</a>
+		{% endfor %}
+	</div>
+	<div class="section-inner">
+		<figure class="image-banner">
+			<img src="{{ book.bannerImage }}" alt="{{ book.bannerAlt }}">
+			<figcaption>{{ book.bannerCaption }}</figcaption>
+		</figure>
+	</div>
+</section>
+
+<section class="section section--muted" id="about">
+	<div class="section-inner section-heading">
+		<p class="section-label">{{ about.label }}</p>
+		<h2>{{ about.title | safe }}</h2>
+		<div class="markdown">{{ about.body | md | safe }}</div>
+	</div>
+	<div class="section-inner about-grid">
+		{% for card in about.cards %}
+			<article>
+				<div class="about-grid__icon">{{ card.icon }}</div>
+				<h3>{{ card.title }}</h3>
+				<p>{{ card.body }}</p>
+			</article>
+		{% endfor %}
+	</div>
+	<blockquote class="section-inner pullquote">
+		<div class="markdown">{{ about.pullquote | md | safe }}</div>
+		<cite>Wild Globalization</cite>
+	</blockquote>
+</section>
+
+<section class="section" id="author">
+	<div class="section-inner section-rule">
+		<p class="section-label">{{ author.label }}</p>
+	</div>
+	<div class="section-inner author-card h-card">
+		<div class="author-card__media">
+			<img class="u-photo" src="{{ author.image }}" alt="{{ author.imageAlt }}">
+			<p>
+				<a class="p-name u-url" href="{{ settings.person.url }}" rel="me">Gary Bedford</a>
+				<strong class="p-org">{{ author.orgName }}</strong>
+				<span class="p-role">{{ author.orgRole }}</span>
+			</p>
+		</div>
+		<div class="author-card__body">
+			<h2>{{ author.title | safe }}</h2>
+			<p class="kicker">{{ author.kicker }}</p>
+			<div class="markdown">{{ author.body | md | safe }}</div>
+			<div class="stats">
+				{% for stat in author.stats %}
+				<p><strong>{{ stat.value }}</strong><span>{{ stat.label }}</span></p>
+				{% endfor %}
+			</div>
+			<div class="actions">
+				<a class="button" href="{{ author.ctaPrimary.url }}" rel="noopener noreferrer">{{ author.ctaPrimary.label }}</a>
+				<a class="button button--secondary" href="{{ author.ctaSecondary.url }}">{{ author.ctaSecondary.label }}</a>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}

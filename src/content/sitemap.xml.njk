@@ -1,0 +1,17 @@
+---
+layout: false
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+feed: false
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for item in collections.all %}
+{% if item.url and item.data.feed != false and item.url != '/sitemap.xml' %}
+  <url>
+    <loc>{{ item.url | fullUrl }}</loc>
+    {% if item.date %}<lastmod>{{ item.date | dateToRfc3339 }}</lastmod>{% endif %}
+  </url>
+{% endif %}
+{% endfor %}
+</urlset>

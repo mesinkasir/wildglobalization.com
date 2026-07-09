@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="{{ settings.defaultLanguage or 'en' }}">
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	{% set isArticlePage = (ldType == 'Article') or (pagetype == 'article') or (tags and ('blog' in tags) and not eleventyExcludeFromCollections) %}
+	{% set publishedDate = date or page.date %}
+	<title>{{ title or settings.title }} • {{ settings.tagline }}</title>
+	<meta name="description" content="{{ description or settings.description }}">
+	<meta name="generator" content="Eleventy v{{ eleventy.version }}">
+	<link rel="canonical" href="{{ page.url | fullUrl }}">
+	{% if settings.noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
+
+	<meta property="og:title" content="{{ title or settings.title }}">
+	<meta property="og:description" content="{{ description or settings.description }}">
+	<meta property="og:type" content="{% if isArticlePage %}article{% else %}{{ settings.seo.openGraph.type }}{% endif %}">
+	<meta property="og:url" content="{{ page.url | fullUrl }}">
+	<meta property="og:site_name" content="{{ settings.title }}">
+	{% set socialImage = hero.image or '/assets/images/hero-global-network.jpg' %}
+	<meta property="og:image" content="{{ (socialImage | url) | absoluteUrl(settings.url) }}">
+	<meta property="og:image:alt" content="{{ hero.imageAlt or settings.title }}">
+	{% if isArticlePage %}
+	<meta property="article:published_time" content="{{ publishedDate | dateToRfc3339 }}">
+	<meta property="article:modified_time" content="{{ publishedDate | dateToRfc3339 }}">
+	<meta property="article:author" content="{{ settings.author.url }}">
+	{% endif %}
+
+	<meta name="twitter:card" content="{{ settings.seo.twitter.card }}">
+	<meta name="twitter:title" content="{{ title or settings.title }}">
+	<meta name="twitter:description" content="{{ description or settings.description }}">
+	<meta name="twitter:image" content="{{ (socialImage | url) | absoluteUrl(settings.url) }}">
+	<meta name="twitter:site" content="@wildglobalization">
+
+	<meta name="citation_title" content="{{ title or settings.title }}">
+	<meta name="citation_author" content="Bedford, Gary">
+	<meta name="citation_publication_date" content="{{ publishedDate | dateYear }}">
+	<meta name="citation_online_date" content="{{ publishedDate | dateToRfc3339 }}">
+	<meta name="citation_public_url" content="{{ page.url | fullUrl }}">
+	<meta name="DC.title" content="{{ title or settings.title }}">
+	<meta name="DC.creator" content="Gary Bedford">
+	<meta name="DC.publisher" content="{{ settings.organization.name }}">
+	<meta name="DC.identifier" content="{{ page.url | fullUrl }}">
+
+	{% for link in settings.head.link %}
+	<link{% for attr, val in link %} {{ attr }}="{{ val }}"{% endfor %}>
+	{% endfor %}
+	{% for script in settings.head.script %}
+	<script{% for attr, val in script %} {{ attr }}="{{ val }}"{% endfor %}></script>
+	{% endfor %}
+	{% for meta in settings.head.meta %}
+	<meta{% for attr, val in meta %} {{ attr }}="{{ val }}"{% endfor %}>
+	{% endfor %}
+	{% for icon in settings.favicons %}
+	<link{% for attr, val in icon %} {{ attr }}="{{ val }}"{% endfor %}>
+	{% endfor %}
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "{% if isArticlePage %}Article{% else %}{{ ldType or 'WebPage' }}{% endif %}",
+		"name": "{{ title or settings.title }}",
+		"description": "{{ description or settings.description }}",
+		"url": "{{ page.url | fullUrl }}",
+		"image": "{{ (socialImage | url) | absoluteUrl(settings.url) }}",
+		"author": {
+			"@type": "Person",
+			"name": "{{ settings.author.name }}",
+			"url": "{{ settings.author.url }}"
+		},
+		{% if isArticlePage %}
+		"headline": "{{ title or settings.title }}",
+		"datePublished": "{{ publishedDate | dateToRfc3339 }}",
+		"dateModified": "{{ publishedDate | dateToRfc3339 }}",
+		"mainEntityOfPage": "{{ page.url | fullUrl }}",
+		{% endif %}
+		"publisher": {
+			"@type": "Organization",
+			"name": "{{ settings.organization.name }}",
+			"logo": {
+				"@type": "ImageObject",
+				"url": "{{ settings.organization.logo }}"
+			}
+		}
+	}
+	</script>
+	<script type="application/ld+json">{{ settings.structuredData | json | safe }}</script>
+	{% block head %}{% endblock %}
+	</head>
+	<body class="{{ bodyClass | default('site-page') }}">
+		<a class="skip-link" href="#content">Skip to content</a>
+		<span class="Z3988 visually-hidden" title="ctx_ver=Z39.88-2004&rft_val_fmt=info:ofi/fmt:kev:mtx:dc&rft.title={{ (title or settings.title) | urlencode }}&rft.creator=Gary%20Bedford&rft.publisher={{ settings.organization.name | urlencode }}&rft.identifier={{ (page.url | fullUrl) | urlencode }}"></span>
+{% set currentNav = navigation.home if page.url == '/' else navigation.pages %}
+
+<header class="site-header" data-site-header>
+ <a class="brand" href="/" aria-label="{{ navigation.brand.ariaLabel }}">
+    <span class="brand__primary">{{ navigation.brand.primary }}</span>
+    <span class="brand__secondary">{{ navigation.brand.secondary }}</span>
+  </a>
+  <nav class="site-nav" aria-label="Primary navigation" data-site-nav>
+    {% for item in currentNav %}
+      {% if item.children %}
+        <div class="nav-item nav-item--has-children">
+          <a class="nav-link" href="{{ item.href }}" aria-haspopup="true">{{ item.label }}</a>
+          <div class="nav-dropdown" aria-label="{{ item.label }} pages">
+            {% for child in item.children %}
+              <a href="{{ child.href }}">{{ child.label }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <a class="nav-link" href="{{ item.href }}">{{ item.label }}</a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+  <a class="button button--small site-header__cta" href="{{ navigation.button.href }}" rel="noopener noreferrer" target="_blank">
+    <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M237.2,151.87v0a47.1,47.1,0,0,0-2.35-5.45L193.26,51.8a7.82,7.82,0,0,0-1.66-2.44,32,32,0,0,0-45.26,0A8,8,0,0,0,144,55V80H112V55a8,8,0,0,0-2.34-5.66,32,32,0,0,0-45.26,0,7.82,7.82,0,0,0-1.66,2.44L21.15,146.4a47.1,47.1,0,0,0-2.35,5.45v0A48,48,0,1,0,112,168V96h32v72a48,48,0,1,0,93.2-16.13ZM76.71,59.75a16,16,0,0,1,19.29-1v73.51a47.9,47.9,0,0,0-46.79-9.92ZM64,200a32,32,0,1,1,32-32A32,32,0,0,1,64,200ZM160,58.74a16,16,0,0,1,19.29,1l27.5,62.58A47.9,47.9,0,0,0,160,132.25ZM192,200a32,32,0,1,1,32-32A32,32,0,0,1,192,200Z"></path></svg>
+    <span>{{ navigation.button.label }}</span>
+  </a>
+  <button class="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span class="visually-hidden">Toggle navigation menu</span>
+  </button>
+</header>
+<div class="mobile-overlay" id="mobile-overlay" data-mobile-overlay></div>
+<nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" data-mobile-nav>
+  {% for item in currentNav %}
+    {% if item.children %}
+      <div class="mobile-nav__group">
+        <a href="{{ item.href }}">{{ item.label }}</a>
+        <div class="mobile-nav__children">
+          {% for child in item.children %}
+            <a href="{{ child.href }}">{{ child.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <a href="{{ item.href }}">{{ item.label }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>
+
+		<main id="content" data-pagefind-body>
+			{% block content %}{{ content | safe }}{% endblock %}
+		</main>
+		<footer class="site-footer">
+		  <div class="section-inner footer-grid">
+    <div>
+      <p class="footer-brand"><span>{{ footer.brand.primary }}</span> {{ footer.brand.secondary }}</p>
+      <p>{{ footer.brand.description }}</p>
+      <a class="button" href="{{ footer.brand.cta.url }}" rel="noopener noreferrer">{{ footer.brand.cta.label }}</a>
+    </div>
+    <div>
+      <h2>{{ footer.navigateTitle }}</h2>
+      <ul>
+        {% for item in footer.navigate %}
+          <li>
+            <a href="{{ item.href }}">{{ item.label }}</a>
+            {% if item.children %}
+              <ul class="footer-subnav">
+                {% for child in item.children %}
+                  <li><a href="{{ child.href }}">{{ child.label }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div>
+      <h2>{{ footer.ForcesTitle }}</h2>
+      <ul>
+        {% for force in footer.Forces %}
+          <li><a href="{{ force.href }}">{{ force.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div>
+      <h2>{{ footer.goingWildTitle }}</h2>
+      <ul>
+        {% for item in footer.goingWild %}
+          <li><a href="{{ item.href }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+		  <div class="footer-bottom">
+		    <div class="footer-bottom__copyright">
+		      <a class="footer-feed-link" href="{{ footer.feed.href }}" aria-label="{{ footer.feed.label }}" title="{{ footer.feed.label }} · {{ footer.feed.credit }}">
+		        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M106.91,149.09A71.53,71.53,0,0,1,128,200a8,8,0,0,1-16,0,56,56,0,0,0-56-56,8,8,0,0,1,0-16A71.53,71.53,0,0,1,106.91,149.09ZM56,80a8,8,0,0,0,0,16A104,104,0,0,1,160,200a8,8,0,0,0,16,0A120,120,0,0,0,56,80Zm118.79,1.21A166.9,166.9,0,0,0,56,32a8,8,0,0,0,0,16A151,151,0,0,1,163.48,92.52,151,151,0,0,1,208,200a8,8,0,0,0,16,0A166.9,166.9,0,0,0,174.79,81.21ZM60,184a12,12,0,1,0,12,12A12,12,0,0,0,60,184Z"></path></svg>
+		      </a>
+		      <p class="p-org">&copy; {{ buildDate | dateYear }} {{ footer.copyright.owner }}. {{ footer.copyright.rights }}</p>
+		    </div>
+    <p class="footer-bottom__built-with">Built with <a href="https://11ty.dev/" rel="noopener noreferrer">11ty v{{ eleventy.version }}</a></p>
+    <details class="h-card footer-h-card">
+      <summary>
+        <span class="p-name">{{ footer.profile.name }}</span>
+        <span class="footer-h-card__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="footer-h-card__menu">
+        <a class="u-url u-uid" href="{{ footer.profile.url }}" rel="me">{{ footer.profile.name }}</a>
+        {% if footer.profile.organization %}
+          <span class="p-org">{{ footer.profile.organization }}</span>
+        {% endif %}
+        {% for link in footer.profile.links %}
+          <a class="u-url" href="{{ link.href }}" rel="me">{{ link.label }}</a>
+        {% endfor %}
+      </div>
+    </details>
+    
+  </div>
+</footer>
+	</body>
+</html>

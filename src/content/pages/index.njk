@@ -1,0 +1,26 @@
+---
+layout: layouts/page.njk
+title: "Pages"
+description: "Standalone Wild Globalization pages migrated into the Eleventy site."
+permalink: /site-pages/
+showInPagesNav: false
+showInTimeline: false
+---
+
+{% if collections.pages.length %}
+<ul class="post-list">
+	{% for item in collections.pages %}
+		<li>
+			<a href="{{ item.url }}">{{ item.data.title }}</a>
+			{% if item.data.timelineEra %}
+				<span>{{ item.data.timelineEra }}</span>
+			{% endif %}
+			{% if item.data.description %}
+				<p>{{ item.data.description }}</p>
+			{% endif %}
+		</li>
+	{% endfor %}
+</ul>
+{% else %}
+<p>No pages have been added yet.</p>
+{% endif %}

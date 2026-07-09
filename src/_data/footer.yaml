@@ -1,0 +1,68 @@
+brand:
+  primary: "Wild"
+  secondary: "Globalization"
+  description: "A pan-historical exploration of the six wild forces driving our hyper-globalizing civilization."
+  cta:
+    label: "Book Release Notification"
+    url: "https://explore.wildglobalization.com/"
+
+navigateTitle: "Wild Globalization"
+navigate:
+  - label: "About"
+    href: "/#about"
+  - label: "Author"
+    href: "/about-the-author/"
+  - label: "Blog"
+    href: "/blog/"
+  - label: "Search"
+    href: "/search/"
+  - label: "Timeline"
+    href: "/timeline/" 
+
+ForcesTitle: "Six Forces"
+Forces:
+  - label: "Wild Culture"
+    href: "/wild-sex-culture/"
+  - label: "Wild Ecology"
+    href: "/wild-ecology/"
+  - label: "Wild Economy"
+    href: "/wild-economy/"
+  - label: "Wild Governance"
+    href: "/wild-governance/"
+  - label: "Wild Technology"
+    href: "/wild-tech/"
+  - label: "Wild Wealth"
+    href: "/wild-wealth/"  
+goingWildTitle: "Going Wild"
+goingWild:
+  - label: "Welcome"
+    href: "/welcome/"
+  - label: "Opening Act"
+    href: "/opening-act/"
+  - label: "Newsletter"
+    href: "https://explore.wildglobalization.com/"
+  - label: "Hints"
+    href: "/hints/"
+  - label: "Wild Globalization 1.0"
+    href: "/wild-globalization-1-0/"
+  - label: "Wild Globalization 2.0"
+    href: "/wild-globalization-2-0/"
+
+copyright:
+  owner: "The Wild Globalization Project"
+  rights: "All rights reserved."
+
+profile:
+  name: "Gary Bedford"
+  url: "https://www.garybedford.com/"
+  organization: "The Wild Globalization Project"
+  links:
+    - label: "LinkedIn"
+      href: "https://www.linkedin.com/in/garybedford/"
+    - label: "Academia.edu"
+      href: "https://independent.academia.edu/GaryBedford"
+
+feed:
+  href: "/feed/feed.xml"
+  label: "atom/rss feed"
+  credit: "Phosphor icons"

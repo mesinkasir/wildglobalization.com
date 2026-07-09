@@ -1,0 +1,36 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+{% set isBlogPost = tags and ('blog' in tags) and not eleventyExcludeFromCollections %}
+{% set publishedDate = date or page.date %}
+<article class="content-page section{% if isBlogPost %} h-entry{% endif %}">
+	<div class="section-inner content-page__inner">
+		{% if eyebrow %}
+			<p class="section-label">{{ eyebrow }}</p>
+		{% endif %}
+		<h1{% if isBlogPost %} class="p-name"{% endif %}>{{ title }}</h1>
+		{% if isBlogPost %}
+			<p class="entry-meta">
+				<a class="u-url" href="{{ page.url | fullUrl }}">
+					<time class="dt-published" datetime="{{ publishedDate | dateToRfc3339 }}">{{ publishedDate | readableDate }}</time>
+				</a>
+				<span>
+					by
+					<a class="p-author h-card" href="{{ settings.person.url }}" rel="author">
+						<span class="p-name">Gary Bedford</span>
+					</a>
+				</span>
+			</p>
+			{% if description %}
+				<p class="entry-summary p-summary">{{ description }}</p>
+			{% endif %}
+		{% endif %}
+		<div class="content-card{% if isBlogPost %} e-content{% endif %}">
+			{% if show_toc %}
+				{{ content | toc | safe }}
+			{% endif %}
+			{{ content | safe }}
+		</div>
+	</div>
+</article>
+{% endblock %}

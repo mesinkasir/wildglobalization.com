@@ -1,0 +1,6 @@
+---
+permalink: /feed/twtxt.txt
+---
+{% for post in collections.blog | limit(20) -%}
+{{ post.date | dateToRfc3339 }}	{{ post.data.title | plainText | safe }}	{{ post.url | fullUrl }}
+{% endfor %}
