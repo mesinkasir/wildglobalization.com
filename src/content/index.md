@@ -14,7 +14,7 @@ hero:
   imageAlt: "Global network visualization"
   ctaPrimary:
     label: "About the Book"
-    url: "#thebook"
+    url: "#book"
   ctaSecondary:
     label: "Join the Newsletter"
     url: "https://explore.wildglobalization.com/"
