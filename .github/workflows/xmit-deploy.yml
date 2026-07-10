@@ -1,46 +1,39 @@
-name: Build and Deploy Eleventy
+name: Deploy Eleventy to XMIT
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: ["main", "master"]
   workflow_dispatch:
     inputs:
       site:
-        description: "XMIT site/domain override"
-        required: false
+        description: "XMIT site/domain (e.g. example.com)"
+        required: true
         type: string
 
 concurrency:
-  group: eleventy-${{ github.workflow }}-${{ github.ref }}
+  group: deploy-xmit-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
-  build:
-    name: Build site
+  deploy:
     runs-on: ubuntu-latest
-
+    env:
+      # Target site/domain for XMIT deploy
+      XMIT_SITE: wilglobalization.com@626 
     steps:
-      - name: Check out repository
+      - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Set up Node
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Eleventy site
         run: npm run build
@@ -53,27 +46,6 @@ jobs:
           fi
           ls -1 _site | head -n 20
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: eleventy-site
-          path: _site
-
-  deploy:
-    name: Deploy to XMIT
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
-    env:
-      XMIT_SITE: ${{ inputs.site || vars.XMIT_SITE || 'wildglobalization.com' }}
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v6
-        with:
-          name: eleventy-site
-          path: _site
-
       - name: Deploy to XMIT (CLI)
         env:
           XMIT_KEY: ${{ secrets.XMIT_KEY }}
@@ -82,14 +54,29 @@ jobs:
             echo "XMIT_KEY secret is not set" >&2
             exit 1
           fi
+          # Use manual input when workflow_dispatch triggers this workflow
+          SITE_INPUT="${{ github.event_name == 'workflow_dispatch' && inputs.site || '' }}"
+          if [ -n "$SITE_INPUT" ]; then
+            export XMIT_SITE="$SITE_INPUT"
+          fi
           if [ -z "$XMIT_SITE" ]; then
-            echo "XMIT site/domain not provided. Set repo variable XMIT_SITE or pass the workflow_dispatch site input." >&2
+            echo "XMIT site/domain not provided. Set repo Variable 'XMIT_SITE' or pass 'site' input." >&2
             exit 1
           fi
-          echo "Deploying _site to $XMIT_SITE via XMIT CLI"
-          npx -y @xmit.co/xmit "$XMIT_SITE" _site
+          echo "Deploying _site to $XMIT_SITE via XMIT CLI";
+          npx -y @xmit.co/xmit "$XMIT_SITE" _site || { echo 'XMIT deploy failed' >&2; exit 1; }
 
       - name: Post-deploy summary
         run: |
-          echo "Deployment attempt finished for $XMIT_SITE"
-          echo "Visit: https://$XMIT_SITE"
+          echo "Deployment attempt finished for $XMIT_SITE";
+          echo "Visit: https://$XMIT_SITE";
+
+    # Uncomment below for an alternative raw API upload if you have endpoint details
+    # steps:
+    #   - name: Deploy via API (curl)
+    #     run: |
+    #       tar -czf site.tar.gz -C _site .
+    #       curl -f -X POST \
+    #         -H "Authorization: Bearer $XMIT_KEY" \
+    #         -F "bundle=@site.tar.gz" \
+    #         https://api.xmit.example/deploy?site=$XMIT_SITE
