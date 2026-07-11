@@ -29,8 +29,8 @@
 	</div>
 	<div class="section-inner force-grid">
 		{% for force in forces %}
-			<a class="force-card" href="{{ force.url }}" aria-label="Explore Wild {{ force.heading }}">
-				<div class="force-card__icon">{{ force.icon }}</div>
+			<a class="force-card" href="{{ force.url }}">
+				<div class="force-card__icon" aria-hidden="true">{{ force.icon }}</div>
 				<p class="force-card__label">{{ force.label }}</p>
 				<h3>{{ force.heading }}</h3>
 				<p>{{ force.body }}</p>
