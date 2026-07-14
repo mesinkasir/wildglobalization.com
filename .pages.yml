@@ -1,0 +1,109 @@
+media:
+  input: src/assets/img
+  output: /assets/img
+  categories: [image]
+  rename: safe
+
+content:
+  - name: blog
+    label: Blog posts
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    exclude: [index.html]
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: date
+        label: Publication date
+        type: date
+        required: true
+      - name: permalink
+        label: Permalink
+        type: string
+      - name: body
+        label: Body
+        type: rich-text
+        required: true
+
+  - name: pages
+    label: Pages
+    type: collection
+    path: src/content/pages
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    exclude: [index.njk, search.njk]
+    view:
+      primary: title
+      sort: title
+    fields:
+      - name: layout
+        type: string
+        default: layouts/page.njk
+        hidden: true
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: permalink
+        label: Permalink
+        type: string
+        required: true
+      - name: eleventyNavigation
+        label: Navigation
+        type: object
+        fields:
+          - name: key
+            label: Label
+            type: string
+          - name: parent
+            type: string
+            default: Pages
+          - name: order
+            type: number
+      - name: timelineDate
+        label: Timeline date
+        type: string
+      - name: timelineEra
+        label: Timeline era
+        type: string
+      - name: timelineCategory
+        label: Timeline category
+        type: string
+      - name: timelineOrder
+        label: Timeline order
+        type: number
+      - name: showInPagesNav
+        label: Show in pages navigation
+        type: boolean
+        default: true
+      - name: showInTimeline
+        label: Show in timeline
+        type: boolean
+        default: true
+      - name: show_toc
+        label: Show table of contents
+        type: boolean
+      - name: body
+        label: Body
+        type: rich-text
+        required: true
