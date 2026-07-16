@@ -1442,12 +1442,14 @@ button:focus-visible {
 .mobile-nav.is-open {
   right: 0;
 }
-
 .mobile-nav-header {
   flex-shrink: 0;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border);
   background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .mobile-nav-header .brand {
@@ -1469,18 +1471,28 @@ button:focus-visible {
   padding: 8px;
   border-radius: 8px;
   transition: background 0.2s ease;
+  flex-shrink: 0;
 }
 
 .mobile-nav-close:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.mobile-nav-close:focus-visible {
+  outline: 2px solid var(--primary, #e12026);
+  outline-offset: 2px;
 }
 
 .mobile-nav-close svg {
   width: 24px;
   height: 24px;
+  display: block;
 }
 
-/* Mobile Nav Links - SCROLLABLE */
+:root[data-theme="dark"] .mobile-nav-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .mobile-nav-links {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -1556,7 +1568,6 @@ button:focus-visible {
   color: var(--primary) !important;
 }
 
-/* Mobile Dropdown */
 .mobile-nav-links .nav-dropdown {
   position: static !important;
   top: auto !important;
@@ -1625,7 +1636,6 @@ button:focus-visible {
   font-size: 0.85rem;
 }
 
-/* Learn Button - Complimentary to Yellow */
 .button--learn {
   background: #7c3aed;
   color: #ffffff;
@@ -1694,9 +1704,6 @@ body.menu-open {
     max-width: 100%;
   }
   
-  .mobile-nav-header {
-    padding: 0.75rem 1rem;
-  }
   
   .mobile-nav-links {
     padding: 0.25rem 1rem 0.75rem;
@@ -1707,15 +1714,6 @@ body.menu-open {
     padding: 0.75rem 0 !important;
   }
   
-  .mobile-nav-buttons {
-    padding: 0.75rem 1rem;
-  }
-  
-  .mobile-nav-buttons .button {
-    font-size: 0.8rem;
-    min-height: 2.5rem;
-    padding: 0.6rem 1rem;
-  }
 }
 
 .hero-title {
@@ -1728,7 +1726,7 @@ h1 {
   overflow-wrap: break-word;
 }
 .button--tertiary {
-  background: #7c3aed; /* Ungu khas untuk Learn */
+  background: #7c3aed;
   color: #ffffff;
   border-color: rgba(124, 58, 237, 0.35);
   box-shadow: 0 14px 35px rgba(124, 58, 237, 0.2);
@@ -1739,4 +1737,24 @@ h1 {
   color: #ffffff;
   filter: brightness(1.1);
   transform: translateY(-1px);
+}
+.hero-title-desktop {
+    display: inline;
+}
+
+.hero-title-mobile {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .hero-title-desktop {
+        display: none;
+    }
+    
+    .hero-title-mobile {
+        display: inline;
+        word-break: break-word;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+    }
 }

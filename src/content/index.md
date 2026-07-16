@@ -1,6 +1,8 @@
 ---
 layout: layouts/home.njk
 title: Wild Globalization
+mobile_title: Wild Global-
+mobile_sub_title: ization
 description: A pan-historical exploration of the six wild forces driving hyper-globalizing civilization.
 permalink: /
 bodyClass: site-home

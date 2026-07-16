@@ -10,6 +10,25 @@ function syncHeader() {
 
 syncHeader();
 window.addEventListener('scroll', syncHeader, { passive: true });
+const mobileClose = document.querySelector('[data-mobile-close]');
+
+if (mobileClose) {
+  mobileClose.addEventListener('click', () => {
+    if (mobileNav) {
+      mobileNav.classList.remove('is-open');
+      if (mobileOverlay) mobileOverlay.classList.remove('is-open');
+      if (menuToggle) {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.classList.remove('is-active');
+      }
+      document.body.classList.remove('menu-open');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    }
+  });
+}
 
 if (menuToggle && mobileNav) {
   function closeMenu() {

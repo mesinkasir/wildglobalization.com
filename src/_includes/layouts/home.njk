@@ -6,7 +6,18 @@
     <div class="hero__shade"></div>
     <div class="section-inner hero__content">
         <p class="eyebrow"><span></span> {{ hero.eyebrow }}</p>
-        <h1>{{ hero.title | safe }}</h1>
+        
+        <h1>
+            {% if mobile_title and mobile_sub_title %}
+                <span class="hero-title-desktop">{{ title }}</span>
+                <span class="hero-title-mobile">
+                    {{ mobile_title }}<wbr>{{ mobile_sub_title }}
+                </span>
+            {% else %}
+                {{ title }}
+            {% endif %}
+        </h1>
+        
         <p class="hero__dek">{{ hero.dek }}</p>
         <div class="actions">
             <a class="button" href="{{ hero.ctaPrimary.url }}" rel="noopener noreferrer">{{ hero.ctaPrimary.label }}</a>
