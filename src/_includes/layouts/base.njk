@@ -88,61 +88,8 @@
 	<body class="{{ bodyClass | default('site-page') }}">
 		<a class="skip-link" href="#content">Skip to content</a>
 		<span class="Z3988 visually-hidden" title="ctx_ver=Z39.88-2004&rft_val_fmt=info:ofi/fmt:kev:mtx:dc&rft.title={{ (title or settings.title) | urlencode }}&rft.creator=Gary%20Bedford&rft.publisher={{ settings.organization.name | urlencode }}&rft.identifier={{ (page.url | fullUrl) | urlencode }}"></span>
-{% set currentNav = navigation.home if page.url == '/' else navigation.pages %}
 
-<header class="site-header" data-site-header>
- <a class="brand" href="/" aria-label="{{ navigation.brand.ariaLabel }}">
-    <span class="brand__primary">{{ navigation.brand.primary }}</span>
-    <span class="brand__secondary">{{ navigation.brand.secondary }}</span>
-  </a>
-  <nav class="site-nav" aria-label="Primary navigation" data-site-nav>
-    {% for item in currentNav %}
-      {% if item.children %}
-        <div class="nav-item nav-item--has-children">
-          <a class="nav-link" href="{{ item.href }}" aria-haspopup="true">{{ item.label }}</a>
-          <div class="nav-dropdown" aria-label="{{ item.label }} pages">
-            {% for child in item.children %}
-              <a href="{{ child.href }}">{{ child.label }}</a>
-            {% endfor %}
-          </div>
-        </div>
-      {% else %}
-        <a class="nav-link" href="{{ item.href }}">{{ item.label }}</a>
-      {% endif %}
-    {% endfor %}
-  </nav>
-  <a class="button button--small site-header__cta" href="{{ navigation.button.href }}" rel="noopener noreferrer" target="_blank">
-    <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M237.2,151.87v0a47.1,47.1,0,0,0-2.35-5.45L193.26,51.8a7.82,7.82,0,0,0-1.66-2.44,32,32,0,0,0-45.26,0A8,8,0,0,0,144,55V80H112V55a8,8,0,0,0-2.34-5.66,32,32,0,0,0-45.26,0,7.82,7.82,0,0,0-1.66,2.44L21.15,146.4a47.1,47.1,0,0,0-2.35,5.45v0A48,48,0,1,0,112,168V96h32v72a48,48,0,1,0,93.2-16.13ZM76.71,59.75a16,16,0,0,1,19.29-1v73.51a47.9,47.9,0,0,0-46.79-9.92ZM64,200a32,32,0,1,1,32-32A32,32,0,0,1,64,200ZM160,58.74a16,16,0,0,1,19.29,1l27.5,62.58A47.9,47.9,0,0,0,160,132.25ZM192,200a32,32,0,1,1,32-32A32,32,0,0,1,192,200Z"></path></svg>
-    <span>{{ navigation.button.label }}</span>
-  </a>
-  <a class="button button--small button--journey site-header__cta" href="{{ navigation.graduation.href }}" rel="noopener noreferrer" target="_blank">
-    <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"></path></svg>
-    <span>{{ navigation.graduation.label }}</span>
-  </a>
-  <button class="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span class="visually-hidden">Toggle navigation menu</span>
-  </button>
-</header>
-<div class="mobile-overlay" id="mobile-overlay" data-mobile-overlay></div>
-<nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" data-mobile-nav>
-  {% for item in currentNav %}
-    {% if item.children %}
-      <div class="mobile-nav__group">
-        <a href="{{ item.href }}">{{ item.label }}</a>
-        <div class="mobile-nav__children">
-          {% for child in item.children %}
-            <a href="{{ child.href }}">{{ child.label }}</a>
-          {% endfor %}
-        </div>
-      </div>
-    {% else %}
-      <a href="{{ item.href }}">{{ item.label }}</a>
-    {% endif %}
-  {% endfor %}
-</nav>
+    {% include "partials/nav.njk" %}
 
 		<main id="content" data-pagefind-body>
 			{% block content %}{{ content | safe }}{% endblock %}

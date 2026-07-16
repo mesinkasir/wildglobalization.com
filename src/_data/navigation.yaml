@@ -11,6 +11,10 @@ graduation:
   label: "Go on the Journey"
   href: "https://journey.wildglobalization.com/"
 
+learn:
+  label: "Learn"
+  href: "https://journey.wildglobalization.com/products/courses/wild-globalization-pilot"
+
 home:
   - label: "Book"
     href: "#book"
