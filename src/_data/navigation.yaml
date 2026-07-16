@@ -7,6 +7,10 @@ button:
   label: "Explore"
   href: "https://explore.wildglobalization.com/"
 
+graduation:
+  label: "Go on the Journey"
+  href: "https://journey.wildglobalization.com/"
+
 home:
   - label: "Book"
     href: "#book"

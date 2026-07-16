@@ -85,7 +85,7 @@ button:focus-visible {
 	z-index: 100;
 	inset: 0 0 auto;
 	display: grid;
-	grid-template-columns: auto 1fr auto auto;
+	grid-template-columns: auto 1fr auto auto auto;
 	align-items: center;
 	gap: 1rem;
 	padding: 1.25rem clamp(1.25rem, 5vw, 4rem);
@@ -237,6 +237,17 @@ button:focus-visible {
 .button--small {
 	min-height: 2.55rem;
 	padding: 0.62rem 1.15rem;
+}
+
+.button--journey {
+	background: var(--secondary);
+	color: var(--primary-ink);
+	border-color: rgba(53, 215, 255, 0.35);
+	box-shadow: 0 14px 35px rgba(53, 215, 255, 0.16);
+}
+
+.button--journey:hover {
+	color: var(--primary-ink);
 }
 
 .menu-toggle {
