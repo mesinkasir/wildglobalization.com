@@ -2,17 +2,20 @@
 
 {% block content %}
 <section class="hero">
-	<img class="hero__image" src="{{ hero.image }}" alt="{{ hero.imageAlt }}" loading="eager" decoding="async" fetchpriority="high" width="1024" height="1024" eleventy:ignore>
-	<div class="hero__shade"></div>
-	<div class="section-inner hero__content">
-		<p class="eyebrow"><span></span> {{ hero.eyebrow }}</p>
-		<h1>{{ hero.title | safe }}</h1>
-		<p class="hero__dek">{{ hero.dek }}</p>
-		<div class="actions">
-			<a class="button" href="{{ hero.ctaPrimary.url }}" rel="noopener noreferrer">{{ hero.ctaPrimary.label }}</a>
-			<a class="button button--secondary" href="{{ hero.ctaSecondary.url }}" rel="noopener noreferrer">{{ hero.ctaSecondary.label }}</a>
-		</div>
-	</div>
+    <img class="hero__image" src="{{ hero.image }}" alt="{{ hero.imageAlt }}" loading="eager" decoding="async" fetchpriority="high" width="1024" height="1024" eleventy:ignore>
+    <div class="hero__shade"></div>
+    <div class="section-inner hero__content">
+        <p class="eyebrow"><span></span> {{ hero.eyebrow }}</p>
+        <h1>{{ hero.title | safe }}</h1>
+        <p class="hero__dek">{{ hero.dek }}</p>
+        <div class="actions">
+            <a class="button" href="{{ hero.ctaPrimary.url }}" rel="noopener noreferrer">{{ hero.ctaPrimary.label }}</a>
+            <a class="button button--secondary" href="{{ hero.ctaSecondary.url }}" rel="noopener noreferrer">{{ hero.ctaSecondary.label }}</a>
+            {% if hero.ctaTertiary %}
+            <a class="button button--tertiary" href="{{ hero.ctaTertiary.url }}" rel="noopener noreferrer">{{ hero.ctaTertiary.label }}</a>
+            {% endif %}
+        </div>
+    </div>
 </section>
 
 <section class="section" id="book">

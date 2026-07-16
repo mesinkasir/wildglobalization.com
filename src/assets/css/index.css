@@ -1717,3 +1717,26 @@ body.menu-open {
     padding: 0.6rem 1rem;
   }
 }
+
+.hero-title {
+  word-wrap: break-word !important;
+  hyphens: auto !important;
+}
+h1 {
+  word-wrap: break-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+.button--tertiary {
+  background: #7c3aed; /* Ungu khas untuk Learn */
+  color: #ffffff;
+  border-color: rgba(124, 58, 237, 0.35);
+  box-shadow: 0 14px 35px rgba(124, 58, 237, 0.2);
+}
+
+.button--tertiary:hover {
+  background: #6d28d9;
+  color: #ffffff;
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}

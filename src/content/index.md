@@ -18,6 +18,9 @@ hero:
   ctaSecondary:
     label: "Join the Newsletter"
     url: "https://explore.wildglobalization.com/"
+  ctaTertiary:
+    label: "Learn"
+    url: "https://journey.wildglobalization.com/products/courses/wild-globalization-pilot"
 
 book:
   label: "The Book"
